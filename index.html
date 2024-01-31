@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário AAPM - Senai Zerbini</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        AAPM - Senai Zerbini
+    </div>
+
+    <div class="container">
+        <h2>Abertura de chamado para rede</h2>
+
+        <form>
+            <div class="form-group">
+                <label for="nome">Nome Aluno:</label>
+                <input type="text" id="nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="turma">Turma:</label>
+                <input type="text" id="turma" required>
+            </div>
+
+            <div class="form-group">
+                <label for="curso">Curso:</label>
+                <input type="text" id="curso" required>
+            </div>
+
+            <div class="form-group">
+                <label for="macaddress">Mac Address:</label>
+                <input type="text" id="macaddress" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="imagem">Anexar Recibo de Pagamento:</label>
+                <input type="file" id="imagem" accept="image/*">
+                <small>Você pode utilizar a câmera do celular.</small>
+            </div>
+
+            <button type="button" onclick="enviarDadosParaFirebase()">Registrar</button>
+        </form>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
+    <script>
+        // Configure o Firebase com suas credenciais
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqx8JeJls9O67XZ3JPxL_RDLpCzbEG6pQ",
+            authDomain: "aapm-91448.firebaseapp.com",
+            databaseURL: "https://aapm-91448-default-rtdb.firebaseio.com",
+            projectId: "aapm-91448",
+            storageBucket: "aapm-91448.appspot.com",
+            messagingSenderId: "849716145393",
+            appId: "1:849716145393:web:a88b7bf03be8ecc5190d50",
+            measurementId: "G-VBSHTBZFG5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        // Obtém uma referência para o banco de dados Firebase
+        const database = firebase.database();
+
+        // Função para enviar dados para o Firebase
+        function enviarDadosParaFirebase() {
+            const nomeAluno = document.getElementById('nome').value;
+            const turma = document.getElementById('turma').value;
+            const curso = document.getElementById('curso').value;
+            const macaddress = document.getElementById('macaddress').value;
+            const imagem = document.getElementById('imagem').files[0]; // Obtém o arquivo de imagem
+
+            // Cria um objeto com os dados
+            const dados = {
+                nomeAluno: nomeAluno,
+                turma: turma,
+                curso: curso,
+                macaddress: macaddress,
+                imagem: imagem.name // Salva o nome do arquivo de imagem
+            };
+
+            // Insere os dados no Firebase
+            database.ref('alunos').push(dados)
+                .then(() => {
+                    alert('Dados enviados com sucesso!');
+                    // Limpa os campos após o envio
+                    document.getElementById('nome').value = '';
+                    document.getElementById('turma').value = '';
+                    document.getElementById('curso').value = '';
+                    document.getElementById('macaddress').value = '';
+                    document.getElementById('imagem').value = '';
+                })
+                .catch((error) => {
+                    console.error('Erro ao enviar os dados: ', error);
+                });
+        }
+    </script>
+</body>
+</html>
