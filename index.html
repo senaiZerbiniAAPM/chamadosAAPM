@@ -12,32 +12,33 @@
     </div>
 
     <div class="container">
-        <h2>Abertura de chamado para rede</h2>
+        <h2>Abertura de chamado para acesso à rede</h2>
 
         <form>
             <div class="form-group">
                 <label for="nome">Nome Aluno:</label>
-                <input type="text" id="nome" required>
+                <input type="text" placeholder="Josimar Arnaldo" id="nome" required>
             </div>
 
             <div class="form-group">
-                <label for="turma">Turma:</label>
-                <input type="text" id="turma" required>
+                <label for="turma" >Turma:</label>
+                <input type="text" placeholder="3DSB" id="turma" required>
             </div>
 
             <div class="form-group">
                 <label for="curso">Curso:</label>
-                <input type="text" id="curso" required>
+                <input type="text"  placeholder="Desenvolvimento de Sistemas (DS)"id="curso" required>
             </div>
 
             <div class="form-group">
-                <label for="macaddress">Mac Address: EX.: 00:1B:44:11:3A:B7</label>
-                <input type="text" id="macaddress" required>
+                <label for="macaddress">Mac Address: 
+                </label>
+                <input type="text" placeholder="Ex.: 00:1A:2B:3C:4D:5E" id="macaddress" required>
             </div>
 
             <div class="form-group">
                 <label for="descricao">Descrição:</label>
-                <textarea id="descricao" required></textarea>
+                <textarea id="descricao" placeholder="Gostaria de acesso ao Wi-Fi, sou pagante desde de 2023" required></textarea>
             </div>
 
             <div class="form-group">
@@ -72,36 +73,41 @@
 
         // Função para enviar dados para o Firebase
         function enviarDadosParaFirebase() {
-            const nomeAluno = document.getElementById('nome').value;
-            const turma = document.getElementById('turma').value;
-            const curso = document.getElementById('curso').value;
-            const macaddress = document.getElementById('macaddress').value;
-            const imagem = document.getElementById('imagem').files[0]; // Obtém o arquivo de imagem
+    const nomeAluno = document.getElementById('nome').value;
+    const turma = document.getElementById('turma').value;
+    const curso = document.getElementById('curso').value;
+    const macaddress = document.getElementById('macaddress').value;
+    const imagemElement = document.getElementById('imagem');
+    const imagem = imagemElement.files[0]; // Pode ser undefined se nenhum arquivo for selecionado
 
-            // Cria um objeto com os dados
-            const dados = {
-                nomeAluno: nomeAluno,
-                turma: turma,
-                curso: curso,
-                macaddress: macaddress,
-                imagem: imagem.name // Salva o nome do arquivo de imagem
-            };
+    // Verifica se um arquivo foi selecionado antes de tentar acessar seu nome
+    const nomeImagem = imagem ? imagem.name : '';
 
-            // Insere os dados no Firebase
-            database.ref('alunos').push(dados)
-                .then(() => {
-                    alert('Dados enviados com sucesso!');
-                    // Limpa os campos após o envio
-                    document.getElementById('nome').value = '';
-                    document.getElementById('turma').value = '';
-                    document.getElementById('curso').value = '';
-                    document.getElementById('macaddress').value = '';
-                    document.getElementById('imagem').value = '';
-                })
-                .catch((error) => {
-                    console.error('Erro ao enviar os dados: ', error);
-                });
-        }
+    // Cria um objeto com os dados
+    const dados = {
+        nomeAluno: nomeAluno,
+        turma: turma,
+        curso: curso,
+        macaddress: macaddress,
+        imagem: nomeImagem // Usa a variável nomeImagem que será uma string vazia se nenhum arquivo for selecionado
+    };
+
+    // Insere os dados no Firebase
+    database.ref('alunos').push(dados)
+        .then(() => {
+            alert('Chamado registrado com sucesso!');
+            // Limpa os campos após o envio
+            document.getElementById('nome').value = '';
+            document.getElementById('turma').value = '';
+            document.getElementById('curso').value = '';
+            document.getElementById('macaddress').value = '';
+            document.getElementById('imagem').value = '';
+        })
+        .catch((error) => {
+            console.error('Erro ao enviar os dados: ', error);
+        });
+}
+
     </script>
 </body>
 </html>
